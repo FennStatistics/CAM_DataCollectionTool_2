@@ -1,7 +1,8 @@
 import { $ } from "../../../app/vendor.js";
 import { store } from "../../../app/store.js";
 
-const ref = `
+function initReferenceDialog() {
+    const ref = `
 
 <div class="reference">
     <div class="tab">
@@ -111,48 +112,48 @@ const ref = `
     </div>
 </div>`;
 
-var target = document.getElementById("dialogReference");
-target.innerHTML += ref;
+    var target = document.getElementById("dialogReference");
+    target.innerHTML += ref;
 
+    // language file
+    $(function () {
+        document.getElementById("dialogReference").title = store.language.qr_top;
+        document.getElementById("quickref").title = store.language.btr_01;
+    });
 
-// language file
-$(function () {
-    document.getElementById("dialogReference").title = store.language.qr_top; // title
-    document.getElementById("quickref").title = store.language.btr_01; // buttons top right (btr)
-});
+    $(function () {
+        if (store.config.cameraFeature) {
+            $("#showCameraFeature").show();
+        } else {
+            $("#showCameraFeature").hide();
+        }
+    });
 
-$(function () {
-    if (store.config.cameraFeature) {
-        $("#showCameraFeature").show();
+    // hide arrows edges
+    if (store.config.enableArrows) {
+        $("#hideConnectorDirInfluence").hide();
+        $(function () {
+            $("#hideConnectorDirInfluence").hide();
+        });
     } else {
-        $("#showCameraFeature").hide();
+        $("#hideConnectorDirInfluence").show();
+        $(function () {
+            $("#hideConnectorDirInfluence").show();
+        });
     }
-});
 
-
-// hide arrows edges
-if (store.config.enableArrows) {
-    $('#hideConnectorDirInfluence').hide();
-    $(function () {
-        $('#hideConnectorDirInfluence').hide();
-    });
-}else{
-    $('#hideConnectorDirInfluence').show();
-    $(function () {
-        $('#hideConnectorDirInfluence').show();
-    });
+    // hide ambivalent nodes
+    if (store.config.enableAmbivalent) {
+        $("#hideAmvivalentNode").hide();
+        $(function () {
+            $("#hideAmvivalentNode").hide();
+        });
+    } else {
+        $("#hideAmvivalentNode").show();
+        $(function () {
+            $("#hideAmvivalentNode").show();
+        });
+    }
 }
 
-
-// hide ambivalent nodes
-if(store.config.enableAmbivalent){
-    $('#hideAmvivalentNode').hide();
-    $(function () {
-        $('#hideAmvivalentNode').hide();
-    });
-}else{
-    $('#hideAmvivalentNode').show();
-    $(function () {
-        $('#hideAmvivalentNode').show();
-    });
-}
+export { initReferenceDialog };

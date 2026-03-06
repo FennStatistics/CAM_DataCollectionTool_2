@@ -21,38 +21,40 @@ Please finish drawing the <i>Cognitive-Affective Map</i> (CAM) now and consider 
 Please click on the background to continue and click the disk icon in the top right corner to save your CAM.
 `;
 
-var startTimeMS = 0; // EPOCH Time of event count started
-var timerStepFirst = 720000; // 1000; // Time first reminder
-var timerStepFinal = 900000; // Time final reminder
+function initReminderDialogs() {
+    var startTimeMS = 0; // EPOCH Time of event count started
+    var timerStepFirst = 720000; // 1000; // Time first reminder
+    var timerStepFinal = 900000; // Time final reminder
 
-function firstReminder() {
-    $("#dialogReminder").dialog("open");
-    $("#textDialogReminder")[0].innerHTML = contentFirstReminder;
+    function firstReminder() {
+        $("#dialogReminder").dialog("open");
+        $("#textDialogReminder")[0].innerHTML = contentFirstReminder;
+    }
+
+    function finalReminder() {
+        $("#dialogReminder").dialog("open");
+        $("#textDialogReminder")[0].innerHTML = contentFinalReminder;
+    }
+
+    function startTimer() {
+        startTimeMS = new Date().getTime();
+        setTimeout(firstReminder, timerStepFirst);
+        setTimeout(finalReminder, timerStepFinal);
+    }
+
+    function getRemainingTime() {
+        var remainingTimeFirst =
+            timerStepFirst - (new Date().getTime() - startTimeMS);
+        var remainingTimeFinal =
+            timerStepFinal - (new Date().getTime() - startTimeMS);
+
+        console.log("remaining time first reminder:", remainingTimeFirst);
+        console.log("remaining time final reminder:", remainingTimeFinal);
+    }
+
+    if (store.config.setReminder) {
+        startTimer();
+    }
 }
 
-function finalReminder() {
-    $("#dialogReminder").dialog("open");
-    $("#textDialogReminder")[0].innerHTML = contentFinalReminder;
-}
-
-// This function starts the two reminder
-function startTimer() {
-    startTimeMS = new Date().getTime();
-    setTimeout(firstReminder, timerStepFirst);
-    setTimeout(finalReminder, timerStepFinal);
-}
-
-// Gets the number of ms remaining to execute the eventRaised Function
-function getRemainingTime() {
-    var remainingTimeFirst =
-        timerStepFirst - (new Date().getTime() - startTimeMS);
-    var remainingTimeFinal =
-        timerStepFinal - (new Date().getTime() - startTimeMS);
-
-    console.log("remaining time first reminder:", remainingTimeFirst);
-    console.log("remaining time final reminder:", remainingTimeFinal);
-}
-
-if (store.config.setReminder) {
-    startTimer();
-}
+export { initReminderDialogs };

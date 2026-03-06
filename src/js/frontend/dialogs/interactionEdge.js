@@ -3,7 +3,8 @@ import { store } from "../../app/store.js";
 import { IncreaseSliderIntensity } from "../../app/constants.js";
 import { COLOUR } from "../colours.js";
 
-const interactionEdge = `
+function initInteractionEdgeDialog() {
+    const interactionEdge = `
 <div class="properties" id="interactionEdge">
             <div style="padding-bottom: 30px;">
                 <button id="deleteEdge" class="material-icons deleteButton" style="color:red;" title="Delete Connector">
@@ -89,169 +90,185 @@ const interactionEdge = `
 
         </div>`;
 
-var target = document.getElementById("dialogInteractionEdge");
-target.innerHTML += interactionEdge;
+    var target = document.getElementById("dialogInteractionEdge");
+    target.innerHTML += interactionEdge;
 
+    // language file
+    $(function () {
+        document.getElementById("deleteEdge").title = store.language.cd_07buttonDelete;
 
-// language file
-$(function () {
-    document.getElementById("deleteEdge").title = store.language.cd_07buttonDelete;
-
-    document.getElementById("bidirectional").title = store.language.cd_05button; // buttons top right (btr)
-    document.getElementById("monodirectional").title = store.language.cd_06button; // buttons top right (btr)
-  });
-
-
-
-
-$(function () {
-    if(store.config.ShowResearcherButtons){
-        $('#hideResearcherButtonsNode').show();
-        $('#hideResearcherButtonsConnector').show();
-        $('#hideResearcherButtonsTop').show();
-    }else{
-        $('#hideResearcherButtonsNode').hide();
-        $('#hideResearcherButtonsConnector').hide();
-        $('#hideResearcherButtonsTop').hide();
-    }
-    if(store.config.OnlyStraightCon){
-        $('#hideSliderDisAgree').hide();
-        $('#hideSliderAgreementOnly').show();
-    }else{
-        $('#hideSliderDisAgree').show();
-        $('#hideSliderAgreementOnly').hide();
-    }
-
-
-
-
-    $('#edgeSlider').on("input", function () {
-
-
-        var intensitySlider = document.querySelector('#edgeSlider');
-        var intensity = 0;
-
-        var myGreenColorSlider = document.querySelector('.greenConnectorColorSlider');
-        var myGreenColorTick = document.querySelector('.greenColorTick');
-
-        var myRedColorSlider = document.querySelector('.redColorConnectorSlider');
-        var myRedColorTick = document.querySelector('.redColorTick');
-
-        // console.log("intensitySlider.value:", intensitySlider.value)
-
-        // background-color to white
-
-        const colourPalette = [COLOUR.white, COLOUR.red1, COLOUR.red2, COLOUR.red3, COLOUR.green3, COLOUR.green2, COLOUR.green1];
-
-        var agreement = intensitySlider.value <= 3 ? false : true;
-        store.cam.currentConnector.setAgreement(agreement);
-
-        myRedColorSlider.style.backgroundColor = intensitySlider.value <= 3 ? colourPalette[intensitySlider.value] : colourPalette[0];
-        myRedColorTick.style.backgroundColor = intensitySlider.value <= 3 ? colourPalette[intensitySlider.value] : colourPalette[0];
-
-        myGreenColorSlider.style.backgroundColor = intensitySlider.value > 3 ? colourPalette[intensitySlider.value] : colourPalette[0];
-        myGreenColorTick.style.backgroundColor = intensitySlider.value > 3 ? colourPalette[intensitySlider.value] : colourPalette[0];
-
-        intensity = intensitySlider.value <= 3 ? (4 - intensitySlider.value) * IncreaseSliderIntensity : (intensitySlider.value - 3) * IncreaseSliderIntensity;
-
-        store.cam.currentConnector.intensity = intensity
-        store.cam.currentConnector.value = intensitySlider.value
-        store.cam.draw();
+        document.getElementById("bidirectional").title = store.language.cd_05button;
+        document.getElementById("monodirectional").title = store.language.cd_06button;
     });
 
-
-    $('#edgeSliderAgreementOnly').on("input", function () {
-
-
-        var intensitySlider = document.querySelector('#edgeSliderAgreementOnly');
-        var intensity = 0;
-
-        var myGreenColorSlider = document.querySelector('.greenConnectorColorSliderAgreementOnly');
-
-        // console.log("intensitySlider.value:", intensitySlider.value)
-
-        // background-color to white
-
-        const colourPalette = [COLOUR.white, COLOUR.red1, COLOUR.red2, COLOUR.red3, COLOUR.green3, COLOUR.green2, COLOUR.green1];
-
-
-        myGreenColorSlider.style.backgroundColor = intensitySlider.value > 3 ? colourPalette[intensitySlider.value] : colourPalette[0];
-
-        intensity = intensitySlider.value <= 3 ? (4 - intensitySlider.value) * IncreaseSliderIntensity : (intensitySlider.value - 3) * IncreaseSliderIntensity;
-
-        store.cam.currentConnector.intensity = intensity
-        store.cam.currentConnector.value = intensitySlider.value
-        store.cam.draw();
-    });
-    
-
-
-
-    $("#bidirectional").on("click", () => {
-        if (store.cam.currentConnector != null) {
-            store.cam.updateElement("Connector", "bidirection", true)
-            store.cam.draw();
+    $(function () {
+        if (store.config.ShowResearcherButtons) {
+            $("#hideResearcherButtonsNode").show();
+            $("#hideResearcherButtonsConnector").show();
+            $("#hideResearcherButtonsTop").show();
+        } else {
+            $("#hideResearcherButtonsNode").hide();
+            $("#hideResearcherButtonsConnector").hide();
+            $("#hideResearcherButtonsTop").hide();
         }
-    });
-
-    $("#monodirectional").on("click", () => {
-        if (store.cam.currentConnector != null) {
-            store.cam.updateElement("Connector", "direction", null)
-            store.cam.draw();
+        if (store.config.OnlyStraightCon) {
+            $("#hideSliderDisAgree").hide();
+            $("#hideSliderAgreementOnly").show();
+        } else {
+            $("#hideSliderDisAgree").show();
+            $("#hideSliderAgreementOnly").hide();
         }
-    });
 
-    // > delete
-    $("#deleteEdge").on("click", (evt) => {
-        store.cam.currentConnector.enterLog({
-            type: "connector was deleted",
-            value: -99
+        $("#edgeSlider").on("input", function () {
+            var intensitySlider = document.querySelector("#edgeSlider");
+            var intensity = 0;
+
+            var myGreenColorSlider = document.querySelector(
+                ".greenConnectorColorSlider"
+            );
+            var myGreenColorTick = document.querySelector(".greenColorTick");
+
+            var myRedColorSlider = document.querySelector(".redColorConnectorSlider");
+            var myRedColorTick = document.querySelector(".redColorTick");
+
+            const colourPalette = [
+                COLOUR.white,
+                COLOUR.red1,
+                COLOUR.red2,
+                COLOUR.red3,
+                COLOUR.green3,
+                COLOUR.green2,
+                COLOUR.green1,
+            ];
+
+            var agreement = intensitySlider.value <= 3 ? false : true;
+            store.cam.currentConnector.setAgreement(agreement);
+
+            myRedColorSlider.style.backgroundColor =
+                intensitySlider.value <= 3
+                    ? colourPalette[intensitySlider.value]
+                    : colourPalette[0];
+            myRedColorTick.style.backgroundColor =
+                intensitySlider.value <= 3
+                    ? colourPalette[intensitySlider.value]
+                    : colourPalette[0];
+
+            myGreenColorSlider.style.backgroundColor =
+                intensitySlider.value > 3
+                    ? colourPalette[intensitySlider.value]
+                    : colourPalette[0];
+            myGreenColorTick.style.backgroundColor =
+                intensitySlider.value > 3
+                    ? colourPalette[intensitySlider.value]
+                    : colourPalette[0];
+
+            intensity =
+                intensitySlider.value <= 3
+                    ? (4 - intensitySlider.value) * IncreaseSliderIntensity
+                    : (intensitySlider.value - 3) * IncreaseSliderIntensity;
+
+            store.cam.currentConnector.intensity = intensity;
+            store.cam.currentConnector.value = intensitySlider.value;
+            store.cam.draw();
         });
-        store.cam.deleteElement();
-        $("#dialogInteractionEdge").dialog('close'); // close pop-up
-    });
 
-    $("#ResErasabilityConnector").on("click", (evt) => {
-        if (store.cam.currentConnector != null) {
-            if (store.cam.currentConnector.isDeletable == true) {
-                store.cam.currentConnector.setIsDeletable(false);
-                toastr.info('The connector is now not deletable.');
-            } else if (store.cam.currentConnector.isDeletable == false) {
-                store.cam.currentConnector.setIsDeletable(true);
-                toastr.info('The connector is now deletable.');
+        $("#edgeSliderAgreementOnly").on("input", function () {
+            var intensitySlider = document.querySelector("#edgeSliderAgreementOnly");
+            var intensity = 0;
+
+            var myGreenColorSlider = document.querySelector(
+                ".greenConnectorColorSliderAgreementOnly"
+            );
+
+            const colourPalette = [
+                COLOUR.white,
+                COLOUR.red1,
+                COLOUR.red2,
+                COLOUR.red3,
+                COLOUR.green3,
+                COLOUR.green2,
+                COLOUR.green1,
+            ];
+
+            myGreenColorSlider.style.backgroundColor =
+                intensitySlider.value > 3
+                    ? colourPalette[intensitySlider.value]
+                    : colourPalette[0];
+
+            intensity =
+                intensitySlider.value <= 3
+                    ? (4 - intensitySlider.value) * IncreaseSliderIntensity
+                    : (intensitySlider.value - 3) * IncreaseSliderIntensity;
+
+            store.cam.currentConnector.intensity = intensity;
+            store.cam.currentConnector.value = intensitySlider.value;
+            store.cam.draw();
+        });
+
+        $("#bidirectional").on("click", () => {
+            if (store.cam.currentConnector != null) {
+                store.cam.updateElement("Connector", "bidirection", true);
+                store.cam.draw();
             }
-        }
-    });
-})
+        });
 
-// hide arrows
-if (store.config.enableArrows) {
-    $('#hideConnectorDirInfluence').hide();
-    $(function () {
-        $('#hideConnectorDirInfluence').hide();
+        $("#monodirectional").on("click", () => {
+            if (store.cam.currentConnector != null) {
+                store.cam.updateElement("Connector", "direction", null);
+                store.cam.draw();
+            }
+        });
+
+        // > delete
+        $("#deleteEdge").on("click", () => {
+            store.cam.currentConnector.enterLog({
+                type: "connector was deleted",
+                value: -99,
+            });
+            store.cam.deleteElement();
+            $("#dialogInteractionEdge").dialog("close");
+        });
+
+        $("#ResErasabilityConnector").on("click", () => {
+            if (store.cam.currentConnector != null) {
+                if (store.cam.currentConnector.isDeletable == true) {
+                    store.cam.currentConnector.setIsDeletable(false);
+                    toastr.info("The connector is now not deletable.");
+                } else if (store.cam.currentConnector.isDeletable == false) {
+                    store.cam.currentConnector.setIsDeletable(true);
+                    toastr.info("The connector is now deletable.");
+                }
+            }
+        });
     });
-}else{
-    $('#hideConnectorDirInfluence').show();
-    $(function () {
-        $('#hideConnectorDirInfluence').show();
-    });
+
+    // hide arrows
+    if (store.config.enableArrows) {
+        $("#hideConnectorDirInfluence").hide();
+        $(function () {
+            $("#hideConnectorDirInfluence").hide();
+        });
+    } else {
+        $("#hideConnectorDirInfluence").show();
+        $(function () {
+            $("#hideConnectorDirInfluence").show();
+        });
+    }
+
+    // hide / show slider reference
+    if (store.config.OnlyStraightCon) {
+        $(function () {
+            $("#hideSliderDisAgreeRef").hide();
+            $("#hideSliderDisAgreeRef2").hide();
+            $("#showSliderAgreeOnlyRef").show();
+        });
+    } else {
+        $(function () {
+            $("#hideSliderDisAgreeRef").show();
+            $("#hideSliderDisAgreeRef2").show();
+            $("#showSliderAgreeOnlyRef").hide();
+        });
+    }
 }
 
-
-
-// hide / show slider reference 
-if (store.config.OnlyStraightCon) {
-    $(function () {
-        $('#hideSliderDisAgreeRef').hide();
-        $('#hideSliderDisAgreeRef2').hide();
-        $('#showSliderAgreeOnlyRef').show();
-    });
-}else{
-    $(function () {
-        $('#hideSliderDisAgreeRef').show();
-        $('#hideSliderDisAgreeRef2').show();
-        $('#showSliderAgreeOnlyRef').hide();
-    });
-}
-
-
+export { initInteractionEdgeDialog };

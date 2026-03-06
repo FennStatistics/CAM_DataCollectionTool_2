@@ -4,6 +4,8 @@ import { IncreaseSliderIntensity, moveCAMSpeed } from "../app/constants.js";
 import { COLOUR } from "./colours.js";
 import { NodeCAM } from "../backend/nodeCAM.js";
 
+function initEventListenersBackend() {
+
 $(document).on("mousedown", ".node", function (event) {
     store.ui.arrayPositions = [];
     /* if double click */
@@ -327,6 +329,8 @@ $(document).on("mouseup", "#CAMSVG", function (event) {
     }
 });
 
+}
+
 function resetConnectorSelection() {
     if (store.cam.hasSelectedConnector) {
         store.cam.unselectConnection();
@@ -401,4 +405,4 @@ if (store.config.cameraFeature) {
     });
 }
 
-export { resetConnectorSelection, resetNodeSelection };
+export { initEventListenersBackend, resetConnectorSelection, resetNodeSelection };

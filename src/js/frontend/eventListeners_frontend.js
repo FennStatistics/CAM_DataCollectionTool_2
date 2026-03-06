@@ -2,6 +2,8 @@ import { $ } from "../app/vendor.js";
 import { store } from "../app/store.js";
 import { resetNodeSelection } from "./eventListeners_backend.js";
 
+function initEventListenersFrontend() {
+
 // only add to event log if value has been changed:
 var currentText = null;
 var currentValue = null;
@@ -371,3 +373,6 @@ function closeTab() {
 
 window.openTab = openTab;
 window.closeTab = closeTab;
+}
+
+export { initEventListenersFrontend };

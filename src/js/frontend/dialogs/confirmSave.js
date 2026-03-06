@@ -1,6 +1,7 @@
 import { store } from "../../app/store.js";
 
-const confirmSaveCAM = `
+function initConfirmSaveDialog() {
+    const confirmSaveCAM = `
 <div class="reference">
 <div id="informationDefault" class="confirm-save">
 ${store.language.confirmSaving_02_text}
@@ -8,5 +9,8 @@ ${store.language.confirmSaving_02_text}
 </div>
 `;
 
-var target = document.getElementById("dialogConfirmSave");
-target.innerHTML += confirmSaveCAM;
+    var target = document.getElementById("dialogConfirmSave");
+    target.innerHTML += confirmSaveCAM;
+}
+
+export { initConfirmSaveDialog };
