@@ -1,10 +1,13 @@
 import { jatosStub } from "./jatosStub.js";
 
 function getJatos() {
-    if (typeof window !== "undefined" && window.jatos) {
-        return window.jatos;
+    if (jatos) {
+        console.log("JATOS found, using it.");
+        return jatos;
+    } else {
+        console.warn("JATOS not found, using stub instead.");
+        return jatosStub;
     }
-    return jatosStub;
 }
 
 export { getJatos };
