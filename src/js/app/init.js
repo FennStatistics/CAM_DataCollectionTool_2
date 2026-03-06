@@ -40,7 +40,6 @@ async function initApp() {
     await import("../frontend/buttons/researcher/downloadJSONbutton.js");
     await import("../frontend/buttons/researcher/uploadJSONbutton.js");
     await import("../frontend/buttons/researcher/createConfigSave.js");
-    await import("../frontend/buttons/researcher/testbutton.js");
 
     await import("../frontend/eventListeners_backend.js");
     await import("../frontend/eventListeners_frontend.js");
