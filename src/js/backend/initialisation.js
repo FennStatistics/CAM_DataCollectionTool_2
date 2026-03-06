@@ -63,7 +63,7 @@ async function initCAMFromSource() {
         return;
     }
 
-    console.log("default CAM drawn - MongoDB is not used");
+    console.log("default CAM drawn - Supabase is not used");
     defaultCAM();
 }
 

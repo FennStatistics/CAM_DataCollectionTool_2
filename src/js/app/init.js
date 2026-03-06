@@ -1,5 +1,5 @@
 import { config, defaultFlags } from "../../../config/configfile.js";
-import { buildLanguageFileOut } from "../../../config/languageFile.js";
+import { buildLanguageFileOut } from "../../../config/languages/languageFile.js";
 import {
     setCam,
     setConfig,
@@ -119,7 +119,7 @@ async function initApp() {
     await initCAMFromSource();
 
     if (store.language && store.language.alert_loading) {
-        alert(store.language.alert_loading);
+        //alert(store.language.alert_loading);
     }
 
     const loadingScreen = document.getElementById("loading-screen");
