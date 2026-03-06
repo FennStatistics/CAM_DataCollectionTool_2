@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jQuery Surrounding Icon Editor</title>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      padding: 40px;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 24px;
+    }
+
+    p.note {
+      color: #555;
+      margin-bottom: 24px;
+    }
+
+    .canvas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .editable {
+      position: relative;
+      min-width: 160px;
+      min-height: 90px;
+      padding: 24px;
+      border: 2px solid #cfd7e6;
+      background: #fff;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: box-shadow 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
+    }
+
+    .editable:hover {
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+
+    .editable.selected {
+      border-color: #2b7cff;
+      box-shadow: 0 0 0 4px rgba(43, 124, 255, 0.15);
+    }
+
+    .editable.rounded {
+      border-radius: 28px;
+    }
+
+    .editable.big-text {
+      font-size: 24px;
+    }
+
+    .editable.highlight {
+      background: #fff2a8;
+    }
+
+    .editable.red-text {
+      color: #c62828;
+    }
+
+    /* floating icon menu */
+    #iconMenu {
+      position: absolute;
+      width: 0;
+      height: 0;
+      display: none;
+      z-index: 9999;
+    }
+
+    .menu-btn {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 50%;
+      background: #1f2937;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+
+    .menu-btn:hover {
+      transform: scale(1.08);
+      background: #111827;
+    }
+
+    .menu-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* surrounding positions */
+    .top    { top: -68px; left: -21px; }
+    .right  { top: -21px; left: 26px; }
+    .bottom { top: 26px; left: -21px; }
+    .left   { top: -21px; left: -68px; }
+    .top-left     { top: -56px; left: -56px; }
+    .top-right    { top: -56px; left: 14px; }
+    .bottom-left  { top: 14px; left: -56px; }
+    .bottom-right { top: 14px; left: 14px; }
+
+    .legend {
+      margin-top: 30px;
+      background: #fff;
+      border: 1px solid #dde3ef;
+      border-radius: 12px;
+      padding: 16px 18px;
+      max-width: 700px;
+    }
+
+    .legend code {
+      background: #eef2f7;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Click an element to open surrounding icons</h1>
+  <p class="note">
+    Each icon changes one aspect of the clicked element. Click anywhere outside to close the icons.
+  </p>
+
+  <div class="canvas">
+    <div class="editable">Box 1</div>
+    <div class="editable">Box 2</div>
+    <div class="editable">Box 3</div>
+    <div class="editable">Box 4</div>
+  </div>
+
+  <!-- floating menu -->
+  <div id="iconMenu">
+    <button class="menu-btn top" data-action="toggle-red" title="Toggle red text">A</button>
+    <button class="menu-btn right" data-action="toggle-big" title="Toggle bigger text">+</button>
+    <button class="menu-btn bottom" data-action="toggle-round" title="Toggle rounded corners">◯</button>
+    <button class="menu-btn left" data-action="toggle-highlight" title="Toggle yellow background">★</button>
+
+    <button class="menu-btn top-left" data-action="align-left" title="Align left">L</button>
+    <button class="menu-btn top-right" data-action="align-center" title="Align center">C</button>
+    <button class="menu-btn bottom-left" data-action="align-right" title="Align right">R</button>
+    <button class="menu-btn bottom-right" data-action="reset" title="Reset element">↺</button>
+  </div>
+
+  <div class="legend">
+    <strong>Icon actions:</strong><br><br>
+    <code>A</code> red text<br>
+    <code>+</code> bigger text<br>
+    <code>◯</code> rounded corners<br>
+    <code>★</code> yellow background<br>
+    <code>L</code> align left<br>
+    <code>C</code> align center<br>
+    <code>R</code> align right<br>
+    <code>↺</code> reset
+  </div>
+
+  <script>
+    $(function () {
+      let $current = null;
+      const $menu = $('#iconMenu');
+
+      function showMenu($element) {
+        const offset = $element.offset();
+        const width = $element.outerWidth();
+        const height = $element.outerHeight();
+
+        // center of clicked element
+        const centerX = offset.left + width / 2;
+        const centerY = offset.top + height / 2;
+
+        $menu.css({
+          left: centerX + 'px',
+          top: centerY + 'px',
+          display: 'block'
+        });
+      }
+
+      function clearSelection() {
+        $('.editable').removeClass('selected');
+        $menu.hide();
+        $current = null;
+      }
+
+      $('.editable').on('click', function (e) {
+        e.stopPropagation();
+
+        $current = $(this);
+
+        $('.editable').removeClass('selected');
+        $current.addClass('selected');
+
+        showMenu($current);
+      });
+
+      $menu.on('click', '.menu-btn', function (e) {
+        e.stopPropagation();
+
+        if (!$current) return;
+
+        const action = $(this).data('action');
+
+        switch (action) {
+          case 'toggle-red':
+            $current.toggleClass('red-text');
+            break;
+
+          case 'toggle-big':
+            $current.toggleClass('big-text');
+            break;
+
+          case 'toggle-round':
+            $current.toggleClass('rounded');
+            break;
+
+          case 'toggle-highlight':
+            $current.toggleClass('highlight');
+            break;
+
+          case 'align-left':
+            $current.css('text-align', 'left');
+            break;
+
+          case 'align-center':
+            $current.css('text-align', 'center');
+            break;
+
+          case 'align-right':
+            $current.css('text-align', 'right');
+            break;
+
+          case 'reset':
+            $current.removeClass('red-text big-text rounded highlight');
+            $current.css('text-align', 'left');
+            break;
+        }
+
+        // keep menu attached in case size changes
+        showMenu($current);
+      });
+
+      $(document).on('click', function () {
+        clearSelection();
+      });
+
+      $(window).on('resize scroll', function () {
+        if ($current) {
+          showMenu($current);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
