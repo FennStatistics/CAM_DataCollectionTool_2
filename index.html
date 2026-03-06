@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>CAM</title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="./img/favicon_logoCAM2.PNG"
+    />
+
+    <!--
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    -->
+
+    <style>
+      #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+        z-index: 9999;
+      }
+    </style>
+  </head>
+
+  <body id="hideall">
+    <div id="loading-screen">
+      Please wait, loading...
+    </div>
+
+    <!-- DIALOGS -->
+    <div id="dialogStart" title="Herzlich willkommen zur CAM-Studie!">
+      <div class="properties" style="font-size: 12px;">
+        Die folgenden Regeln gelten für die <i>kognitiv-affektive Karte</i>
+        (CAM), die Sie zeichnen sollten:
+        <ul style="font-size: 12px;">
+          <li>Zeichnen Sie insgesamt mindestens 10 Konzepte.</li>
+          <li>Verwenden Sie nicht mehr als drei Wörter pro Begriff.</li>
+          <li>Verbinden Sie alle gezeichneten Begriffe miteinander.</li>
+          <li>Sie haben insgesamt 15 Minuten Zeit.</li>
+        </ul>
+        Wenn Sie Hilfe benötigen, klicken Sie auf den grünen
+        Referenzknopf oben rechts. Um Ihr CAM zu speichern, klicken Sie auf das
+        Diskettensymbol.
+        <br />
+        <br />
+        Bitte zoomen Sie heraus, so dass Sie das gesamte Zeichenfenster des CAMs
+        sehen können. Sie können nun dieses Dialogfenster schließen und
+        mit dem Zeichnen beginnen. Viel Spaß!
+      </div>
+    </div>
+
+    <!-- > remind participant -->
+    <div id="dialogReminder" title="Hinweis">
+      <div id="textDialogReminder" class="properties" style="font-size: 14px;">
+      </div>
+    </div>
+
+    <!-- > confirm save -->
+    <div id="dialogConfirmSave" title="Confirm">
+    </div>
+
+    <!-- > set up study -->
+    <div id="dialogSetUpStudy" title="Define parameters for your study"></div>
+
+    <!-- > quick reference -->
+    <div id="dialogReference" title="Quick reference"></div>
+
+    <!-- > change connector -->
+    <div id="dialogInteractionEdge" title="Change connector"></div>
+
+    <!-- > change node -->
+    <div id="dialogInteractionNode" title="Change concept"></div>
+
+    <!-- HEADER -->
+    <div class="main">
+      <div class="boxCAMSVG">
+        <div id="headerInterface">
+          <div id="leftButton" class="cam-header-left">
+            <div id="hideResearcherButtonsTop"></div>
+          </div>
+
+          <div class="cam-header-middle">
+            <span style="font-weight: bold">Cognitive-Affective Maps</span>
+            <img
+              src="./img/logoCAM2.svg"
+              alt="img Valence logo not found"
+              style="height: 1.3rem; width: auto; margin-top: 3px"
+            />
+          </div>
+
+          <div id="rightButton" class="cam-header-right">
+            <button
+              id="quickref"
+              class="material-icons"
+              title="Open a quick reference"
+              style="color: green"
+            >
+              help
+            </button>
+          </div>
+        </div>
+
+        <div class="CAMContainer">
+          <svg id="CAMSVG"></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- defocus div element: -->
+    <div id="alert" style="background: white; visibility: hidden" class="content">
+      <div style="text-align: center;">
+        <div id="alert-text" style="font-weight: bold;">
+        </div>
+        <br />
+        <button
+          id="alert-button-text"
+          type="button"
+          onclick="document.getElementById('alert').style.visibility = 'hidden';
+          document.getElementById('hideall').style.visibility = 'visible'; enterFullscreen(); showDialogOnce();"
+        >
+          click to continue
+        </button>
+      </div>
+    </div>
+
+    <script type="module" src="/src/js/app/main.js"></script>
+  </body>
+</html>

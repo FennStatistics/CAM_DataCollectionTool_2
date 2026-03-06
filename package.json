@@ -1,0 +1,24 @@
+{
+  "name": "cam-dct-vite",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:jatos": "vite build --mode jatos",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "cytoscape": "^3.33.1",
+    "jquery": "^4.0.0",
+    "jquery-ui-dist": "^1.13.3",
+    "js-base64": "^3.7.8",
+    "toastr": "^2.1.4",
+    "utf8": "^3.0.0",
+    "uuid": "^13.0.0"
+  }
+}
