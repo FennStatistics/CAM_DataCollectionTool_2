@@ -14,18 +14,20 @@ function initDeleteButton() {
     });
 
     function deleteCam() {
-        let confirmdel = confirm(store.language.confirmDeleting_01text);
-        if (confirmdel == true) {
-            store.cam.connectors = [];
-            store.cam.nodes = [];
-            toastr.error(store.language.confirmDeleting_02message);
-            console.log("complete CAM has been deleted");
+        $("#dialogConfirmDelete").dialog("open");
+    }
 
-            defaultCAM();
-        }
+    function deleteCamConfirmed() {
+        store.cam.connectors = [];
+        store.cam.nodes = [];
+        toastr.error(store.language.confirmDeleting_02message);
+        console.log("complete CAM has been deleted");
+
+        defaultCAM();
     }
 
     window.deleteCam = deleteCam;
+    window.deleteCamConfirmed = deleteCamConfirmed;
 }
 
 export { initDeleteButton };

@@ -67,7 +67,7 @@ function initInteractionNodeDialog() {
     <div class="properties-size-naming">
     ${store.language.nd_04}
     </div>
-    <textarea id="inpcommentnode"
+    <textarea id="inpcommentnode" rows="4",
         style="width: 97%; text-align: left; margin: auto; display: block;"></textarea>
 </div>
 

@@ -64,6 +64,9 @@ async function initApp() {
     const { initConfirmSaveDialog } = await import(
         "../frontend/dialogs/confirmSave.js"
     );
+    const { initConfirmDeleteDialog } = await import(
+        "../frontend/dialogs/confirmDelete.js"
+    );
     const { initReminderDialogs } = await import(
         "../frontend/dialogs/setReminder.js"
     );
@@ -100,6 +103,7 @@ async function initApp() {
     initInteractionNodeDialog();
     initInteractionEdgeDialog();
     initConfirmSaveDialog();
+    initConfirmDeleteDialog();
     initReminderDialogs();
 
     initReferenceDialog();

@@ -145,6 +145,70 @@ $(function () {
     $("#NoButtonConfirm").button("option", "label", store.language.noButton);
     // dialog confirm save END
 
+    // dialog confirm delete START
+    $("#dialogConfirmDelete").dialog({
+        autoOpen: false,
+        modal: true,
+        show: "fade",
+        hide: false,
+        resizable: false,
+        draggable: true,
+        width: 400,
+        maxWidth: 400,
+        height: "auto",
+
+        open: function () {
+            $(".ui-dialog-titlebar").show();
+            $(this)
+                .dialog({
+                    draggable: false,
+                })
+                .parent()
+                .draggable();
+
+            $(".ui-widget-overlay").on("click", function () {
+                $("#dialogConfirmDelete").dialog("close");
+            });
+        },
+        close: function () {
+            console.log("dialog got closed");
+        },
+        buttons: [
+            {
+                id: "YesButtonConfirmDelete",
+                click: function () {
+                    console.log("clicked dialogConfirmDelete Yes");
+                    deleteCamConfirmed();
+                    $("#dialogConfirmDelete").dialog("close");
+                },
+            },
+            {
+                id: "NoButtonConfirmDelete",
+                click: function () {
+                    console.log("clicked dialogConfirmDelete No");
+                    $("#dialogConfirmDelete").dialog("close");
+                },
+            },
+        ],
+        position: {
+            my: "center",
+            at: "center",
+            of: $(".boxCAMSVG"),
+        },
+    });
+
+    $("#YesButtonConfirmDelete").button(
+        "option",
+        "label",
+        store.language.yesButton
+    );
+    $("#NoButtonConfirmDelete").button(
+        "option",
+        "label",
+        store.language.noButton
+    );
+    // dialog confirm delete END
+
     $("#dialogReference").dialog({
         autoOpen: false,
         modal: true,

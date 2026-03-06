@@ -91,7 +91,7 @@
 
 
 
-#NoButtonConfirm{
+#NoButtonConfirm, #NoButtonConfirmDelete {
     margin-left: 10px;
 }
 
