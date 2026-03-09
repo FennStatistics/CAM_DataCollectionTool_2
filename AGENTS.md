@@ -33,21 +33,24 @@
 - `npm run build` Production build.
 - `npm run build:jatos` Build in JATOS mode (injects `jatos.js`).
 - `npm run preview` Preview a production build.
+- Use `npm` (package-lock present); avoid yarn/pnpm unless the repo adopts them.
 
 ## Lint / Format
 - No lint or format scripts are configured.
 - If adding ESLint/Prettier, update scripts in `package.json` and document here.
+- Match local file formatting when editing; avoid reflowing unrelated code.
 
 ## Tests
 - No test runner is configured.
 - Running a single test is not available yet.
-- If introducing Vitest/Jest, document commands such as `npm run test -- <pattern>`.
+- If introducing Vitest/Jest, document both full-suite and single-test commands (e.g. `npm run test -- <pattern>`).
 
 ## Import and Module Conventions
 - Use ESM `import`/`export` everywhere.
 - Keep explicit `.js` extensions in relative imports.
 - Order imports as: side-effect (CSS), third-party, local modules.
 - Prefer named exports and export lists at the end of the file.
+- Avoid adding path aliases; use relative paths like the existing code.
 - `src/js/app/vendor.js` is the source of shared vendors; avoid importing vendors directly from packages in feature modules.
 
 ## JavaScript Style
@@ -59,6 +62,7 @@
 - Avoid broad refactors or reformatting unrelated lines.
 - When editing long functions, keep existing line breaks and wrapping to reduce diff noise.
 - Maintain the current pattern of function declarations plus explicit exports.
+- Add JSDoc only when it materially improves clarity for complex data shapes.
 
 ## DOM / UI Patterns
 - UI code uses direct DOM APIs and jQuery; follow existing patterns.
